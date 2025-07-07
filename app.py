@@ -196,9 +196,12 @@ def root():
 # === INIT DB route (TEMPORARY) ===
 @app.route('/init-db')
 def init_db():
-    with app.app_context():
-        db.create_all()
-    return "✅ PostgreSQL tables initialized!"
+    try:
+        with app.app_context():
+            db.create_all()
+        return "✅ PostgreSQL tables initialized!"
+    except Exception as e:
+        return f"❌ Error initializing DB: {str(e)}", 500
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
